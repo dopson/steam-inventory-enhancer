@@ -9,6 +9,11 @@ const state = {
   apiUrl: config.API_URL,
   steamInventoryRequestError: '',
   steamInventory: [],
+  games: [
+    { name: 'No game selected', id: 0 },
+    { name: 'Team Fortress 2', id: 440 },
+    { name: 'Dota 2', id: 570 },
+  ],
 };
 
 const getters = {
@@ -16,6 +21,11 @@ const getters = {
     const inventory = vuexState.steamInventory;
 
     return inventory;
+  },
+  games: (vuexState) => {
+    const games = vuexState.games;
+
+    return games;
   },
 };
 
@@ -28,26 +38,26 @@ const mutations = {
   setAllItemsToSteamInventory: (vuexState, newItems) => {
     const actualState = vuexState;
 
-    actualState.steamInventory = newItems;
+    Object.assign(actualState.steamInventory, newItems);
   },
   setSteamInventoryRequestError: (vuexState, newError) => {
     const actualState = vuexState;
 
-    actualState.steamInventoryRequestError = newError;
+    Object.assign(actualState.steamInventoryRequestError, newError);
   },
 };
 
 const actions = {
-  getSteamInventory({ commit, vuexState }, steamId, gameId) {
-    const steamApiUrl = `http://steamcommunity.com/inventory/${steamId}/${gameId}/2`;
-    const requestUrl = vuexState.apiUrl + steamApiUrl;
+  getSteamInventory(context, params) {
+    const steamApiUrl = `http://steamcommunity.com/inventory/${params.steamId}/${params.gameId}/2?l=english&count=5000`;
+    const requestUrl = config.API_URL + steamApiUrl;
 
     axios.get(requestUrl)
     .then((response) => {
-      commit('setAllItemsToSteamInventory', response.descriptions);
+      context.commit('setAllItemsToSteamInventory', response.data.descriptions);
     })
     .catch((error) => {
-      commit('setSteamInventoryRequestError', error);
+      context.commit('setSteamInventoryRequestError', error);
     });
   },
 };
