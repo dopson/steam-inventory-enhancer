@@ -8,7 +8,9 @@ Vue.use(Vuex);
 const state = {
   apiUrl: config.API_URL,
   steamInventoryRequestError: '',
+  steamAssetsRequestError: '',
   steamInventory: [],
+  steamAssets: [],
   games: [
     { name: 'No game selected', id: 0 },
     { name: 'Team Fortress 2', id: 440 },
@@ -27,37 +29,63 @@ const getters = {
 
     return games;
   },
+  steamAssets: (vuexState) => {
+    const assets = vuexState.steamAssets;
+
+    return assets;
+  },
 };
 
 const mutations = {
   removeAllFromSteamInventory: (vuexState) => {
-    const actualState = vuexState;
-
-    actualState.steamInventory = [];
+    vuexState.steamInventory.splice(0, vuexState.steamInventory.length);
   },
-  setAllItemsToSteamInventory: (vuexState, newItems) => {
-    const actualState = vuexState;
-
-    Object.assign(actualState.steamInventory, newItems);
+  addNewItemsToSteamInventory: (vuexState, newItems) => {
+    vuexState.steamInventory.push(...newItems);
   },
   setSteamInventoryRequestError: (vuexState, newError) => {
-    const actualState = vuexState;
-
-    Object.assign(actualState.steamInventoryRequestError, newError);
+    Object.assign(vuexState.steamInventoryRequestError, newError);
+  },
+  removeAllFromSteamAssets: (vuexState) => {
+    console.log('remove?');
+    vuexState.steamAssets.splice(0, vuexState.steamAssets.length);
+  },
+  addNewItemsToSteamAssets: (vuexState, newItems) => {
+    console.log('set?');
+    vuexState.steamAssets.push(...newItems);
+    console.log(vuexState.steamAssets);
+  },
+  setSteamAssetsRequestError: (vuexState, newError) => {
+    Object.assign(vuexState.steamAssetsRequestError, newError);
   },
 };
 
 const actions = {
   getSteamInventory(context, params) {
     const steamApiUrl = `http://steamcommunity.com/inventory/${params.steamId}/${params.gameId}/2?l=english&count=5000`;
-    const requestUrl = config.API_URL + steamApiUrl;
+    const requestUrl = config.API_URL + encodeURIComponent(steamApiUrl);
 
     axios.get(requestUrl)
     .then((response) => {
-      context.commit('setAllItemsToSteamInventory', response.data.descriptions);
+      context.commit('removeAllFromSteamInventory');
+      context.commit('addNewItemsToSteamInventory', response.data.descriptions);
     })
     .catch((error) => {
       context.commit('setSteamInventoryRequestError', error);
+    });
+  },
+  getSteamAssetsForGame(context, params) {
+    const steamApiUrl = `https://api.steampowered.com/ISteamEconomy/GetAssetPrices/v1/?appid=${params.gameId}&key=${config.STEAM_API_KEY}`;
+    const requestUrl = config.API_URL + encodeURIComponent(steamApiUrl);
+
+    axios.get(requestUrl)
+    .then((response) => {
+      console.log(response);
+      context.commit('removeAllFromSteamAssets');
+      context.commit('addNewItemsToSteamAssets', response.data.result.assets);
+    })
+    .catch((error) => {
+      context.commit('setSteamAssetsRequestError', error);
     });
   },
 };
