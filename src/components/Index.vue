@@ -1,48 +1,35 @@
 <template>
   <div>
-    <md-layout md-row>
-        <md-card>
-          <md-card-content>
-            <md-input-container>
-              <label for="steam-id">Steam Id</label>
-              <md-input id="steam-id" name="steam-id" placehodler="Your steam ID" v-model="steamId"></md-input>
-            </md-input-container>
+    <v-layout>
+      <v-flex xs2 class="elevation-1 pb-2">
+        <v-flex xs10 offset-xs1>
+          <v-text-field label="Your steam ID" v-model="steamId"></v-text-field>
+        </v-flex>
+        <v-flex xs10 offset-xs1>
+          <v-select
+                  v-bind:items="games"
+                  v-model="selectedGame"
+                  class="input-group--focused"
+                  item-text="name"
+                  item-value="id"
+                  label="Game"></v-select>
+        </v-flex>
+        <v-btn flat primary v-on:click="getSteamData">Search</v-btn>
+      </v-flex>
 
-            <md-input-container>
-              <label for="selected-game">Game </label>
-              <md-select id="selected-game" name="selected-game" v-model="selectedGame">
-                <md-option v-for="game in games" :key="game.id" v-bind:value="game.id">{{game.name}}</md-option>
-              </md-select>
-            </md-input-container>
-
-            <md-button class="md-raised md-primary" v-on:click.native="getSteamData()">Get my inventory</md-button>
-          </md-card-content>
-        </md-card>
-
-        <md-card>
-          <md-card-content>
-            <md-table>
-              <md-table-header>
-                <md-table-row>
-                  <md-table-head>Image</md-table-head>
-                  <md-table-head md-sort-by="item_name">Name</md-table-head>
-                  <md-table-head md-sort-by="item_description">Description</md-table-head>
-                  <md-table-head md-sort-by="item_rarity">Rarity</md-table-head>
-                </md-table-row>
-              </md-table-header>
-
-              <md-table-body>
-                <md-table-row v-for="item in steamInventory" :key="item.id">
-                  <md-table-cell></md-table-cell>
-                  <md-table-cell>{{item.name}}</md-table-cell>
-                  <md-table-cell>{{item.type}}</md-table-cell>
-                  <md-table-cell><div class="rarity-indicator" v-bind:style="{ background: '#' + item.name_color }"></div></md-table-cell>
-                </md-table-row>
-              </md-table-body>
-            </md-table>
-          </md-card-content>
-        </md-card>
-    </md-layout>
+      <v-flex xs10 class="elevation-1 pb-2">
+        <v-data-table
+          :items="steamInventory"
+          :rows-per-page-items="[{text: 'All', value: -1}]">
+          <template slot="items" scope="props">
+            <td></td>
+            <td>{{props.item.name}}</td>
+            <td>{{props.item.type}}</td>
+            <td><div class="rarity-indicator" v-bind:style="{ background: '#' + props.item.name_color }"></div></td>
+          </template>
+        </v-data-table>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
