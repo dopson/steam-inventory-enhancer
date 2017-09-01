@@ -4,9 +4,11 @@
       <v-toolbar class="blue" dark>
         <v-toolbar-title>Steam inventory enhancer</v-toolbar-title>
       </v-toolbar>
-      <div class="main-content">
-        <router-view></router-view>
-      </div>
+      <main>
+        <div class="main-content">
+          <router-view></router-view>
+        </div>
+      </main>
     </v-app>
   </div>
 </template>

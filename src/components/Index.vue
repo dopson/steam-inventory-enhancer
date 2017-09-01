@@ -20,24 +20,28 @@
       <v-flex xs10 class="elevation-1 pb-2">
         <v-data-table
           :items="steamInventory"
-          :rows-per-page-items="[{text: 'All', value: -1}]">
+          :rows-per-page-items="[20]">
           <template slot="items" scope="props">
             <td></td>
-            <td>{{props.item.name}}</td>
+            <td v-on:click="setSelectedItem(props.item)">{{props.item.name}}</td>
             <td>{{props.item.type}}</td>
             <td><div class="rarity-indicator" v-bind:style="{ background: '#' + props.item.name_color }"></div></td>
           </template>
         </v-data-table>
       </v-flex>
+
+      <item-details></item-details>
     </v-layout>
   </div>
 </template>
 
 <script>
+import ItemDetails from '@/components/ItemDetails';
 import { mapGetters, mapActions } from 'vuex';
 import config from '../config/config';
 
 export default {
+  components: { ItemDetails },
   name: 'index',
   data() {
     return {
@@ -56,6 +60,7 @@ export default {
     ...mapActions([
       'getSteamInventory',
       'getSteamAssetsForGame',
+      'setSelectedItem',
     ]),
   },
   computed: {
