@@ -39,9 +39,10 @@ const getters = {
   },
   selectedItem: (vuexState) => {
     const item = vuexState.selectedItem;
-
+    console.log(item);
     return item;
   },
+  getImagePathForItem: (vuexState, imagePath) => config.STEAM_IMAGES_URL + imagePath,
 };
 
 const mutations = {
