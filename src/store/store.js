@@ -14,6 +14,10 @@ const state = {
   selectedItem: {
     name: 'Click on an item name to see its details',
   },
+  selectedItemPrices: {
+    lowest_price: 'Not available',
+    median_price: 'Not available',
+  },
   games: [
     { name: 'No game selected', id: 0 },
     { name: 'Team Fortress 2', id: 440 },
@@ -39,7 +43,12 @@ const getters = {
   },
   selectedItem: (vuexState) => {
     const item = vuexState.selectedItem;
-    console.log(item);
+
+    return item;
+  },
+  selectedItemPrices: (vuexState) => {
+    const item = vuexState.selectedItemPrices;
+
     return item;
   },
   getImagePathForItem: (vuexState, imagePath) => config.STEAM_IMAGES_URL + imagePath,
@@ -73,6 +82,19 @@ const mutations = {
 
     stateObject.selectedItem = { ...newItem };
   },
+  setSelectedItemPrices: (vuexState, newItem) => {
+    const stateObject = vuexState;
+    let newItemObject = newItem;
+
+    if (!newItemObject.lowest_price) {
+      newItemObject = {
+        lowest_price: 'Not available',
+        median_price: 'Not available',
+      };
+    }
+
+    stateObject.selectedItemPrices = { ...newItemObject };
+  },
 };
 
 const actions = {
@@ -103,7 +125,17 @@ const actions = {
     });
   },
   setSelectedItem(context, params) {
+    const steamPricesApiUrl = `http://steamcommunity.com/market/priceoverview/?currency=3&appid=${params.appid}&market_hash_name=${params.market_hash_name}`;
+    const requestUrl = config.API_URL + encodeURIComponent(steamPricesApiUrl);
     context.commit('setSelectedItem', params);
+
+    axios.get(requestUrl)
+    .then((response) => {
+      context.commit('setSelectedItemPrices', response.data);
+    })
+    .catch((error) => {
+      context.commit('setSteamAssetsRequestError', error);
+    });
   },
 };
 

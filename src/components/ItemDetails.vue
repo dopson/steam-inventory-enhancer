@@ -21,6 +21,12 @@
           </v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
+      <v-list-tile>
+        <v-list-tile-content>
+          <v-list-tile-sub-title>Lowest price: {{selectedItemPrices.lowest_price}}</v-list-tile-sub-title>
+          <v-list-tile-sub-title>Median price: {{selectedItemPrices.median_price}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
       <v-expansion-panel focusable>
         <v-expansion-panel-content>
           <div slot="header">Descriptions</div>
@@ -75,6 +81,7 @@
     computed: {
       ...mapGetters([
         'selectedItem',
+        'selectedItemPrices',
       ]),
     },
   };
