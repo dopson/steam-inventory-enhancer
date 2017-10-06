@@ -23,7 +23,7 @@
           :items="steamInventory"
           :rows-per-page-items="[20]">
           <template slot="items" scope="props">
-            <td><img v-bind:src="thumbnailPath(props.icon_url)"/></td>
+            <td><img class="item-thumbnail" v-bind:src="thumbnailPath(props.item.icon_url)"/></td>
             <td class="item-name" v-on:click="setSelectedItem(props.item)">{{props.item.name}}</td>
             <td>{{props.item.type}}</td>
             <td><div class="rarity-indicator" v-bind:style="{ background: '#' + props.item.name_color }"></div></td>
@@ -92,5 +92,9 @@ export default {
 
 .item-name:hover {
   text-decoration: underline;
+}
+
+.item-thumbnail {
+  max-height: 40px;
 }
 </style>

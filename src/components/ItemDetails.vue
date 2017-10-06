@@ -17,7 +17,7 @@
       <v-list-tile>
         <v-list-tile-content>
           <v-list-tile-title>
-            {{selectedItem.type}}
+            <span v-bind:style="{ color: '#' + selectedItem.name_color }">{{selectedItem.type}}</span>
           </v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
