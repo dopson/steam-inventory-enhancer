@@ -17,13 +17,13 @@
         <v-btn flat primary v-on:click="getSteamData">Search</v-btn>
       </v-flex>
 
-      <v-flex xs10 class="elevation-1 pb-2">
+      <v-flex xs7 class="elevation-1 pb-2">
         <v-data-table
           :items="steamInventory"
           :rows-per-page-items="[20]">
           <template slot="items" scope="props">
             <td></td>
-            <td v-on:click="setSelectedItem(props.item)">{{props.item.name}}</td>
+            <td class="item-name" v-on:click="setSelectedItem(props.item)">{{props.item.name}}</td>
             <td>{{props.item.type}}</td>
             <td><div class="rarity-indicator" v-bind:style="{ background: '#' + props.item.name_color }"></div></td>
           </template>
@@ -77,5 +77,13 @@ export default {
 .rarity-indicator {
   height: 15px;
   width: 15px;
+}
+
+.item-name {
+  cursor: pointer;
+}
+
+.item-name:hover {
+  text-decoration: underline;
 }
 </style>

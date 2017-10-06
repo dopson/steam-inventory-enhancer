@@ -1,30 +1,18 @@
 <template>
-  <div>
-    <v-layout>
-      <v-navigation-drawer class=""
-                           persistent
-                           absolute
-                           clipped
-                           right
-                           v-model="detailViewOpen"
-                           height="100%"
-                           light>
-
-        <v-list>
-          <v-list-tile>
-            <v-list-tile-content>
-              {{selectedItem.name}}
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile>
-            <v-list-tile-content>
-              {{selectedItem.type}}
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-navigation-drawer>
-    </v-layout>
-  </div>
+  <v-flex xs3 class="elevation-1 pb-2">
+    <v-list>
+      <v-list-tile>
+        <v-list-tile-content>
+          {{selectedItem.name}}
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile>
+        <v-list-tile-content>
+          {{selectedItem.type}}
+        </v-list-tile-content>
+      </v-list-tile>
+    </v-list>
+  </v-flex>
 </template>
 
 <script>
@@ -34,7 +22,6 @@
     name: 'itemDetails',
     data() {
       return {
-        detailViewOpen: true,
       };
     },
     computed: {
@@ -46,4 +33,7 @@
 </script>
 
 <style scoped>
+.hidden {
+  display: none;
+}
 </style>

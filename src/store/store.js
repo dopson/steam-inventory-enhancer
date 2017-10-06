@@ -11,7 +11,9 @@ const state = {
   steamAssetsRequestError: '',
   steamInventory: [],
   steamAssets: [],
-  selectedItem: {},
+  selectedItem: {
+    name: 'Click on an item name to see its details',
+  },
   games: [
     { name: 'No game selected', id: 0 },
     { name: 'Team Fortress 2', id: 440 },
@@ -50,7 +52,9 @@ const mutations = {
     vuexState.steamInventory.push(...newItems);
   },
   setSteamInventoryRequestError: (vuexState, newError) => {
-    Object.assign(vuexState.steamInventoryRequestError, newError);
+    const stateObject = vuexState;
+
+    stateObject.steamInventoryRequestError = { ...newError };
   },
   removeAllFromSteamAssets: (vuexState) => {
     vuexState.steamAssets.splice(0, vuexState.steamAssets.length);
@@ -59,10 +63,14 @@ const mutations = {
     vuexState.steamAssets.push(...newItems);
   },
   setSteamAssetsRequestError: (vuexState, newError) => {
-    Object.assign(vuexState.steamAssetsRequestError, newError);
+    const stateObject = vuexState;
+
+    stateObject.steamAssetsRequestError = { ...newError };
   },
   setSelectedItem: (vuexState, newItem) => {
-    Object.assign(vuexState.selectedItem, newItem);
+    const stateObject = vuexState;
+
+    stateObject.selectedItem = { ...newItem };
   },
 };
 
@@ -94,7 +102,7 @@ const actions = {
     });
   },
   setSelectedItem(context, params) {
-    context.commit('setSelectedItem', params.item);
+    context.commit('setSelectedItem', params);
   },
 };
 
